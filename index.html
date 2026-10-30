@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Diwali Surprise 🪔</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;overflow:hidden;
+  font-family:Georgia,serif;color:#fff3d9;text-align:center;
+  background:radial-gradient(ellipse at top,#53205f,#1b0d32 55%,#070616);
+}
+.page{
+  min-height:100vh;width:100%;padding:25px;
+  display:none;flex-direction:column;justify-content:center;
+  align-items:center;position:relative;z-index:2;
+  animation:fade .8s ease;
+}
+.page.active{display:flex}
+h1{color:#ffda83;text-shadow:0 0 18px #ff9d00;font-size:clamp(27px,7vw,38px)}
+p{font-size:17px;line-height:1.8;max-width:480px}
+button{
+  background:linear-gradient(120deg,#ffe9a5,#ffad35);
+  border:1px solid #fff0b4;border-radius:30px;
+  padding:13px 25px;color:#381239;font-weight:bold;
+  font-size:15px;margin-top:18px;cursor:pointer;
+  box-shadow:0 0 20px #ffb52e66;
+}
+.hint{font-size:13px;color:#d9c1f6}
+.gift{font-size:100px;cursor:pointer;animation:bounce 1.5s infinite}
+#diya{width:190px;max-width:65vw;cursor:pointer;filter:drop-shadow(0 0 12px #ff9820)}
+.flame{opacity:0;transition:opacity .5s}
+#diya.lit .flame{opacity:1;filter:drop-shadow(0 0 18px #ffae00)}
+#diya.lit{filter:drop-shadow(0 0 30px #ffad20)}
+.wishes{max-width:520px;width:100%;max-height:55vh;overflow:auto}
+.wish{padding:10px 8px;margin:5px 0;border-bottom:1px solid #ffda8338;line-height:1.6}
+.heart{font-size:110px;color:#ff477e;animation:beat 1s infinite;filter:drop-shadow(0 0 25px #ff2776)}
+#sky{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+@keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{50%{transform:translateY(-10px)}}
+@keyframes beat{50%{transform:scale(1.15)}}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<canvas id="sky"></canvas>
+
+<section class="page active" id="giftPage">
+  <div class="gift" onclick="openGift()">🎁</div>
+  <h1>Ek Chhota Sa Surprise 💌</h1>
+  <p> khaas apke liye chhoti si Diwali wishes…</p>
+  <button onclick="openGift()">Open Your Surprise ✨</button>
+  <p class="hint">apke face ki smile 😊 dekh kr mari daily Diwali jasa hota h ❤️</p>
+</section>
+
+<section class="page" id="diyaPage">
+  <h1>Ek Diya hamari dosti ka liya 🪔</h1>
+  <p></p><br>
+  Touch the diya to light and Sky 😘✨</p>
+
+  <svg id="diya" viewBox="0 0 200 160" onclick="lightDiya()">
+    <ellipse cx="100" cy="137" rx="72" ry="9" fill="#ff9b24" opacity=".3"/>
+    <path d="M30 94 Q100 142 170 94 L150 124 Q100 151 50 124Z" fill="#b9431d" stroke="#ffd77d" stroke-width="3"/>
+    <ellipse cx="100" cy="94" rx="70" ry="17" fill="#ffb83f" stroke="#ffe6a3" stroke-width="3"/>
+    <path class="flame" d="M100 86 Q75 59 100 25 Q128 60 100 86Z" fill="#ff741d"/>
+    <path class="flame" d="M100 83 Q88 61 101 42 Q115 64 100 83Z" fill="#fff4a1"/>
+    <path d="M91 93 Q100 81 109 93" fill="none" stroke="#fff0aa" stroke-width="3"/>
+  </svg>
+
+  <p id="diyaText">ab screen pr kuch special hona vala hai 🥰❤️</p>
+</section>
+
+<section class="page" id="wishPage">
+  <h1>Happy Diwali ✨</h1>
+  <div class="wishes">
+    <div class="wish">Tumhari life hamesha khushiyon ki roshni se jagmagati rahe 🪔</div>
+    <div class="wish">Tumhari smile har andhere ko roshan kar de 😊</div>
+    <div class="wish">Jo sapne tumne dekhe hain, woh ek din zaroor poore hon 💫</div>
+    <div class="wish">Tumhe sukoon, happiness aur dher saara pyaar mile ❤️</div>
+    <div class="wish">Kuch log bina kuch kahe bhi din ko special bana dete hain… ✨</div>
+    <div class="wish">Aur kuch smiles aisi hoti hain jo bas yaad reh jaati hain 💝</div>
+  </div>
+  <p>Iss Diwali tumhare chehre par hamesha smile rakhe 🌙</p>
+  <button onclick="showPage('heartPage')">One Last Surprise ❤️</button>
+</section>
+
+<section class="page" id="heartPage">
+  <h1>special Baat 💌</h1>
+  <div class="heart">♥</div>
+  <p>
+    Har diya apni roshni se duniya khoobsurat banata hai…<br>
+    kuch log apni smile se. ✨<br><br>
+    Bas hamesha aise hi khush rehna,<br>
+    tumhari khushi kisi ke liye bahut special hai. ❤️
+  </p>
+  <p class="hint">Happy Diwali, Medam ji 🪔</p>
+  <button onclick="restart()">Surprise Again 🎁</button>
+</section>
+
+<script>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function openGift(){
+  document.querySelector('.gift').textContent='💖';
+  launchBurst(innerWidth/2,innerHeight/2,45);
+  setTimeout(()=>showPage('diyaPage'),650);
+}
+
+let lit=false;
+function lightDiya(){
+  if(lit)return;
+  lit=true;
+  document.getElementById('diya').classList.add('lit');
+  document.getElementById('diyaText').textContent='Look at the screen… this is only for you!😘🥰💗 🎆';
+
+  // Fireworks launch in the sky
+  for(let i=0;i<4;i++){
+    setTimeout(()=>{
+      launchRocket(
+        innerWidth*(.15+Math.random()*.7),
+        innerHeight*(.15+Math.random()*.4)
+      );
+    },i*420);
+  }
+
+  setTimeout(()=>showPage('wishPage'),4200);
+}
+
+function restart(){
+  lit=false;
+  document.getElementById('diya').classList.remove('lit');
+  document.getElementById('diyaText').textContent='Touch the diya to light up the sky 🥰💗❤️';
+  document.querySelector('.gift').textContent='🎁';
+  showPage('giftPage');
+}
+
+// Fireworks animation
+const canvas=document.getElementById('sky');
+const ctx=canvas.getContext('2d');
+let particles=[],rockets=[];
+function resizeSky(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+}
+resizeSky();
+addEventListener('resize',resizeSky);
+
+function launchRocket(tx,ty){
+  rockets.push({
+    x:Math.random()*canvas.width,
+    y:canvas.height+5,
+    tx:tx,ty:ty,
+    hue:Math.random()*360,
+    speed:7+Math.random()*3
+  });
+}
+
+function launchBurst(x,y,count){
+  const hue=Math.random()*360;
+  for(let i=0;i<count;i++){
+    const angle=Math.PI*2*i/count;
+    const speed=1.5+Math.random()*4.5;
+    particles.push({
+      x:x,y:y,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed,
+      life:50+Math.random()*30,
+      max:80,hue:hue,
+      size:1+Math.random()*2
+    });
+  }
+}
+
+function animateSky(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  for(let i=rockets.length-1;i>=0;i--){
+    const r=rockets[i];
+    const dx=r.tx-r.x,dy=r.ty-r.y;
+    const dist=Math.hypot(dx,dy);
+    if(dist<r.speed+4){
+      launchBurst(r.x,r.y,90);
+      rockets.splice(i,1);
+      continue;
+    }
+    r.x+=dx/dist*r.speed;
+    r.y+=dy/dist*r.speed;
+    ctx.beginPath();
+    ctx.arc(r.x,r.y,3,0,Math.PI*2);
+    ctx.fillStyle=`hsl(${r.hue},100%,75%)`;
+    ctx.shadowBlur=12;
+    ctx.shadowColor=`hsl(${r.hue},100%,60%)`;
+    ctx.fill();
+    ctx.shadowBlur=0;
+  }
+
+  for(let i=particles.length-1;i>=0;i--){
+    const p=particles[i];
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.vx*=.985;
+    p.vy=p.vy*.985+.035;
+    p.life--;
+    ctx.globalAlpha=Math.max(0,p.life/p.max);
+    ctx.fillStyle=`hsl(${p.hue},100%,${55+Math.random()*30}%)`;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fill();
+    if(p.life<=0)particles.splice(i,1);
+  }
+  ctx.globalAlpha=1;
+  requestAnimationFrame(animateSky);
+}
+animateSky();
+
+// Twinkling background stars
+const sc=document.getElementById('stars');
+const sx=sc.getContext('2d');
+let starList=[];
+function resizeStars(){
+  sc.width=innerWidth;sc.height=innerHeight;
+  starList=Array.from({length:100},()=>({
+    x:Math.random()*sc.width,
+    y:Math.random()*sc.height,
+    r:Math.random()*1.5+.3,
+    a:Math.random()
+  }));
+}
+function drawStars(){
+  sx.clearRect(0,0,sc.width,sc.height);
+  starList.forEach(s=>{
+    s.a+=(Math.random()-.5)*.1;
+    s.a=Math.max(.2,Math.min(1,s.a));
+    sx.fillStyle=`rgba(255,220,165,${s.a})`;
+    sx.beginPath();sx.arc(s.x,s.y,s.r,0,Math.PI*2);sx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+resizeStars();
+addEventListener('resize',resizeStars);
+drawStars();
+</script>
+</body>
+</html>
